@@ -115,7 +115,7 @@ service dropbear restart
 # install squid3
 cd
 apt-get -y install squid3
-wget -O /etc/squid3/squid.conf "http://vira.cf/squid3.conf"
+wget -O /etc/squid3/squid.conf "https://raw.github.com/shivanada/deb/master/squid3.conf"
 sed -i $MYIP2 /etc/squid3/squid.conf;
 service squid3 restart
 
@@ -158,8 +158,8 @@ sudo gem install lolcat
 # download script
 cd /usr/bin
 wget -O menu "http://vira.cf/menu.sh"
-wget -O usernew "http://vira.cf/usernew.sh"
-wget -O trial "http://vira.cf/trial.sh"
+wget -O usernew "https://raw.github.com/shivanada/deb/master/usernew.sh"
+wget -O trial "https://raw.github.com/shivanada/deb/master/trial.sh"
 wget -O hapus "http://vira.cf/hapus.sh"
 wget -O cek "http://vira.cf/user-login.sh"
 wget -O member "http://vira.cf/user-list.sh"
@@ -190,6 +190,7 @@ service cron restart
 service ssh restart
 service dropbear restart
 service squid3 restart
+service stunnel4 restart
 service webmin restart
 rm -rf ~/.bash_history && history -c
 echo "unset HISTFILE" >> /etc/profile
@@ -212,10 +213,10 @@ echo "===========================================" | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Service"  | tee -a log-install.txt
 echo "-------"  | tee -a log-install.txt
-echo "OpenSSH  : 22, 444"  | tee -a log-install.txt
-echo "Dropbear : 143, 3128"  | tee -a log-install.txt
-echo "SSL      : 443"  | tee -a log-install.txt
-echo "Squid3   : 8000, 8080 (limit to IP SSH)"  | tee -a log-install.txt
+echo "OpenSSH  : 22, 143"  | tee -a log-install.txt
+echo "Dropbear : 80, 442"  | tee -a log-install.txt
+echo "SSL/SSL  : 443"  | tee -a log-install.txt
+echo "Squid3   : 3128, 8000, 8080 (limit to IP SSH)"  | tee -a log-install.txt
 echo "OpenVPN  : TCP 1194 (client config : http://$MYIP:81/client.ovpn)"  | tee -a log-install.txt
 echo "badvpn   : badvpn-udpgw port 7300"  | tee -a log-install.txt
 echo "nginx    : 81"  | tee -a log-install.txt
